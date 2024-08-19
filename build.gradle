@@ -1,0 +1,78 @@
+// https://www.youtube.com/watch?v=L4vkcgRnw2g&t=2753s
+// This file sets up our project for the Gradle task runner and package manager
+// You mostly use it to add dependencies and libraries
+
+plugins {
+  id 'org.springframework.boot' version '2.5.2'
+  id 'io.spring.dependency-management' version '1.0.11.RELEASE'
+  id 'com.google.cloud.tools.appengine' version '2.4.2'
+  id 'java'
+}
+
+group = 'tech.makers'
+version = '0.0.1-SNAPSHOT'
+sourceCompatibility = '11' // This is the version of Java we're targetting
+
+repositories {
+  mavenCentral()
+}
+
+// Here are all of our dependencies!
+dependencies {
+  // Set up Spring Cloud
+  implementation platform("com.google.cloud:spring-cloud-gcp-dependencies:2.0.4")
+
+  // The JPA Object-Relational Mapper, for accessing Postgres
+  implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
+  runtimeOnly 'org.postgresql:postgresql'
+
+  // Spring can do many things. We want it to run a web application, so we depend on that part.
+  implementation 'org.springframework.boot:spring-boot-starter-web'
+
+  // Use Google Cloud libraries to connect to GCP Cloud SQL in production
+  implementation 'com.google.cloud.sql:postgres-socket-factory:1.3.4'
+  implementation 'com.google.cloud:spring-cloud-gcp-starter-secretmanager'
+
+  // Use Google Cloud libraries to connect to GCP Storage
+  implementation 'com.google.cloud:google-cloud-storage'
+
+  // Use Spring Security to implement login and signup
+  implementation 'org.springframework.boot:spring-boot-starter-security'
+  testImplementation 'org.springframework.security:spring-security-test'
+
+  // Use Spring Boot's library for validation
+  implementation 'org.springframework.boot:spring-boot-starter-validation'
+
+  // Use JWT for authentication
+  implementation 'io.jsonwebtoken:jjwt-api:0.11.2'
+  runtimeOnly 'io.jsonwebtoken:jjwt-impl:0.11.2',
+          // Uncomment the next line if you want to use RSASSA-PSS (PS256, PS384, PS512) algorithms:
+          //'org.bouncycastle:bcprov-jdk15on:1.60',
+          'io.jsonwebtoken:jjwt-jackson:0.11.2' // or 'io.jsonwebtoken:jjwt-gson:0.11.2' for gson
+
+  // Basic test support via spring-boot-starter-test
+  testImplementation 'org.springframework.boot:spring-boot-starter-test'
+
+  // Rely on H2 for an in-memory test database that clears between tests
+  testImplementation 'com.h2database:h2'
+}
+
+test {
+  useJUnitPlatform()
+  systemProperty 'spring.profiles.active', 'test'
+}
+
+bootRun {
+  systemProperty 'spring.profiles.active', 'dev'
+}
+
+appengine {
+  stage {
+    artifact = "build/libs/aceplay-0.0.1-SNAPSHOT.jar"
+  }
+
+  deploy {
+    version = "GCLOUD_CONFIG"
+    projectId = "GCLOUD_CONFIG"
+  }
+}

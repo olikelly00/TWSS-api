@@ -1,0 +1,31 @@
+.gradle
+/build/
+/bin/
+.idea/sonarlint/issuestore
+
+*.class
+
+# Package Files #
+build/*.jar
+build/*.war
+build/*.ear
+
+#Gradle temporary files
+target/
+
+#Eclipse files
+**/.project
+**/.classpath
+**/.settings/
+
+#IntelliJ files
+**/*.iml
+**/.idea
+**/.gradle
+
+# virtual machine crash logs, see http://www.java.com/en/download/help/error_hotspot.xml
+hs_err_pid*
+
+# Dev credentials
+/config/application-dev.properties
+gcp-credentials.json

@@ -1,0 +1,8 @@
+# https://www.youtube.com/watch?v=5r3QU09v7ig&t=47s
+runtime: java11
+entrypoint: java -Xmx128m -jar -Dserver.port=$PORT aceplay-0.0.1-SNAPSHOT.jar
+instance_class: F2 # Don't change this without asking Makers Staff
+env_variables:
+  SPRING_PROFILES_ACTIVE: prod
+automatic_scaling:
+  max_instances: 2
